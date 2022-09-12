@@ -1,6 +1,6 @@
 {
-    "name": "mtrajano/laravel-swagger",
-    "description": "Auto generates the swagger documentation for a laravel project",
+    "name": "exstreme/laravel-swagger",
+    "description": "Auto generates the swagger documentation for a laravel project. Fork from mtrajano/laravel-swagger",
     "license": "MIT",
     "authors": [
         {
