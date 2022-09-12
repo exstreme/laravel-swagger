@@ -9,14 +9,14 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": "^8.0.2",
         "phpdocumentor/reflection-docblock": "^5.0",
         "swagger-api/swagger-ui": "^3.25"
     },
     "require-dev": {
         "ext-json": "*",
         "orchestra/testbench": "^3.8 || ^4.0",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^9.5.24",
         "laravel/passport": "^7.5 || ^8.0",
         "vimeo/psalm": "^3.9"
     },
