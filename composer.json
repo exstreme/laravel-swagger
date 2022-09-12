@@ -18,7 +18,6 @@
         "orchestra/testbench": "^3.8 || ^4.0",
         "phpunit/phpunit": "^9.5.24",
         "laravel/passport": "^11.0",
-        "vimeo/psalm": "^3.9"
     },
     "autoload": {
         "files": [
