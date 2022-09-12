@@ -1,5 +1,5 @@
 {
-    "name": "mtrajano/laravel-swagger",
+    "name": "exstreme/laravel-swagger",
     "description": "Auto generates the swagger documentation for a laravel project",
     "license": "MIT",
     "authors": [
