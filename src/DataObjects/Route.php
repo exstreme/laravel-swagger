@@ -301,4 +301,12 @@ class Route
 
         return array_unique($exceptions);
     }
+
+    /**
+     * @return LaravelRoute
+     */
+    public function getRoute(): LaravelRoute
+    {
+        return $this->_route;
+    }
 }
