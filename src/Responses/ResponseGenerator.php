@@ -32,7 +32,7 @@ class ResponseGenerator
         }
         $responseRef = $this->route->getResponseRef();
         if($responseRef){
-            $response[] = [
+            $response += [
                 '200' => [
                     '$ref' => $responseRef,
                 ]
