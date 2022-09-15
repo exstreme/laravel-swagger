@@ -17,10 +17,6 @@ class SuccessResponseGenerator
      * @var Model
      */
     private $model;
-    /**
-     * @var string|null
-     */
-    private ?string $returnType;
 
     public function __construct(Route $route)
     {
@@ -34,11 +30,11 @@ class SuccessResponseGenerator
     {
         $methodMappingHttpCode = [
             'options' => 204,
-            'get'     => 200,
-            'post'    => 201,
-            'put'     => 204,
-            'patch'   => 204,
-            'delete'  => 204,
+            'get' => 200,
+            'post' => 201,
+            'put' => 204,
+            'patch' => 204,
+            'delete' => 204,
         ];
 
         // Get the status code from route method
@@ -50,8 +46,6 @@ class SuccessResponseGenerator
         $description = $this->getDescriptionByHttpCode($httpCode);
 
         $this->setModelFromRouteAction();
-        $this->setReturnTypeFromRouteAction();
-
         if (!$this->model) {
             return [];
         }
@@ -96,7 +90,7 @@ class SuccessResponseGenerator
 
         if ($this->isTypeArrayRoute()) {
             $schema = [
-                'type'  => 'array',
+                'type' => 'array',
                 'items' => $schema,
             ];
         }
@@ -117,20 +111,5 @@ class SuccessResponseGenerator
     private function setModelFromRouteAction(): void
     {
         $this->model = $this->route->getModel();
-    }
-
-    /**
-     * @return void
-     */
-    private function setReturnTypeFromRouteAction(): void
-    {
-        $action = explode('@', $this->route->getAction());
-        if (empty($action[0]) || empty($action[1])) {
-            $this->returnType = null;
-        } else {
-            $className        = $action[0];
-            $methodName       = $action[1];
-            $this->returnType = (new \ReflectionClass($this->route->getRoute()->getController()))->getMethod($methodName)->getReturnType()?->getName() ?? null;
-        }
     }
 }
