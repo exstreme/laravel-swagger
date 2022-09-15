@@ -30,9 +30,9 @@ class Route
 
     public function __construct(LaravelRoute $route, Reflection\DocBlockFactory $docParserFactory = null)
     {
-        $this->_route = $route;
+        $this->_route            = $route;
         $this->_docParserFactory = $docParserFactory ?? Reflection\DocBlockFactory::createInstance();
-        $this->_middleware = $this->_formatMiddleware();
+        $this->_middleware       = $this->_formatMiddleware();
     }
 
     public function getOriginalUri(): string
@@ -74,7 +74,7 @@ class Route
      */
     public function getActionMethods(): array
     {
-        return (array) array_filter($this->getMethods(), function ($route) {
+        return (array)array_filter($this->getMethods(), function ($route) {
             return $route !== 'head';
         });
     }
@@ -208,8 +208,8 @@ class Route
 
         $docBlock = $this->_docParserFactory->create($docBlock);
 
-        $values = array_map(function($tag) {
-            return (string) $tag;
+        $values = array_map(function ($tag) {
+            return (string)$tag;
         }, $docBlock->getTagsByName($tag));
 
         return array_values(array_filter($values));
@@ -222,7 +222,7 @@ class Route
      */
     public function hasFormRequestOnParams(): bool
     {
-        return (bool) $this->getFormRequestClassFromParams();
+        return (bool)$this->getFormRequestClassFromParams();
     }
 
     /**
@@ -300,5 +300,16 @@ class Route
         }
 
         return array_unique($exceptions);
+    }
+
+    /**
+     * @return string|null
+     * @throws \ReflectionException
+     */
+    public function getResponseRef(): ?string
+    {
+        $docBlock = $this->_getActionDocBlock();
+
+        return $this->_getTagValuesForDocblock($docBlock, 'response_ref')[0] ?? null;
     }
 }

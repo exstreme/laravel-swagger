@@ -30,7 +30,14 @@ class ResponseGenerator
         foreach ($generators as $generator) {
             $response += $generator->generate();
         }
-
+        $responseRef = $this->route->getResponseRef();
+        if($responseRef){
+            $response[] = [
+                '200' => [
+                    '$ref' => $responseRef,
+                ]
+            ];
+        }
         if (empty($response)) {
             // Set default response
             $response = [
