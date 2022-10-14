@@ -119,7 +119,7 @@ class SwaggerDocsManager
 
         $fileName = $generator($version, $format, $destination);
 
-        if (!is_string($fileName) || !is_valid_file_name($fileName)) {
+        if (!is_string($fileName)) {
             throw new RuntimeException('The filename is invalid.');
         }
 
