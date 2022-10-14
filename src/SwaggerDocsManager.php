@@ -99,7 +99,7 @@ class SwaggerDocsManager
     public function getSwaggerFileUrl(string $version): string
     {
         $versionConfig = $this->findVersionConfig($version);
-        $format = $versionConfig['file_format'] ?? 'json';
+        $format        = $versionConfig['file_format'] ?? 'json';
 
         $fileName = $this->generateSwaggerFileName($version, $format);
 
@@ -113,11 +113,11 @@ class SwaggerDocsManager
      * @param string $format
      * @return string
      */
-    public function generateSwaggerFileName(string $version, string $format): string
+    public function generateSwaggerFileName(string $version, string $format, string $destination = ''): string
     {
         $generator = self::$_fileNameGenerator ?? $this->_getDefaultFileNameGenerator();
 
-        $fileName = $generator($version, $format);
+        $fileName = $generator($version, $format, $destination);
 
         if (!is_string($fileName) || !is_valid_file_name($fileName)) {
             throw new RuntimeException('The filename is invalid.');
@@ -144,8 +144,8 @@ class SwaggerDocsManager
      */
     private function _getDefaultFileNameGenerator(): Closure
     {
-        return function (string $version, string $format = 'json') {
-            return "swagger-{$version}.{$format}";
+        return function (string $version, string $format = 'json', string $destination = '') {
+            return "{$destination}swagger-{$version}.{$format}";
         };
     }
 
@@ -154,12 +154,12 @@ class SwaggerDocsManager
      */
     private function _getFilledWithGlobalConfigs(array $version): array
     {
-        $version['title'] = $this->_config['title'];
-        $version['description'] = $this->_config['description'];
-        $version['schemes'] = $this->_config['schemes'];
-        $version['parseDocBlock'] = $this->_config['parseDocBlock'];
-        $version['parseSecurity'] = $this->_config['parseSecurity'];
-        $version['generateExampleData'] = $this->_config['generateExampleData'];
+        $version['title']                   = $this->_config['title'];
+        $version['description']             = $this->_config['description'];
+        $version['schemes']                 = $this->_config['schemes'];
+        $version['parseDocBlock']           = $this->_config['parseDocBlock'];
+        $version['parseSecurity']           = $this->_config['parseSecurity'];
+        $version['generateExampleData']     = $this->_config['generateExampleData'];
         $version['parseModelRelationships'] = $this->_config['parseModelRelationships'];
 
         return $version;

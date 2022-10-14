@@ -63,7 +63,8 @@ class GenerateSwaggerDocCommand extends Command
 
             $fileName = $this->swaggerDocsManager->generateSwaggerFileName(
                 $versionConfig['appVersion'],
-                $format
+                $format,
+                $versionConfig['appDestination']
             );
 
             file_put_contents(public_path($fileName), $formattedDocs);
