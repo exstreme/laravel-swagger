@@ -15,14 +15,14 @@ class BodyParameterGenerator implements ParameterGenerator
 
     public function getParameters(): array
     {
-        $required = [];
+        $required   = [];
         $properties = [];
 
         $params = [
-            'in' => $this->getParamLocation(),
-            'name' => 'body',
+            'in'          => $this->getParamLocation(),
+            'name'        => 'body',
             'description' => '',
-            'schema' => [
+            'schema'      => [
                 'type' => 'object',
             ],
         ];
@@ -71,12 +71,22 @@ class BodyParameterGenerator implements ParameterGenerator
         }
 
         if (!isset($properties[$name])) {
-            $propObj = $this->getNewPropObj($type, $rules);
+            if ($name !== 0 && empty($properties['properties'])) {
+                $propObj = $this->getNewPropObj($type, $rules);
 
-            $properties[$name] = $propObj;
+                if ($name === 0) {
+                    $properties = $propObj;
+                } else {
+                    $properties[$name] = $propObj;
+                }
+            }
         } else {
-            //overwrite previous type in case it wasn't given before
-            $properties[$name]['type'] = $type;
+            if ($name === 0) {
+                $properties['type'] = $type;
+            } else {
+                //overwrite previous type in case it wasn't given before
+                $properties[$name]['type'] = $type;
+            }
         }
 
         if ($type === 'array') {
@@ -85,6 +95,12 @@ class BodyParameterGenerator implements ParameterGenerator
             }
 
             $this->addToProperties($properties[$name]['items'], $nameTokens, $rules);
+        } elseif ($type === 'object' && $name === 0) {
+            if (!isset($properties['properties'])) {
+                $properties['properties'] = [];
+            }
+
+            $this->addToProperties($properties['properties'], $nameTokens, $rules);
         } elseif ($type === 'object') {
             if (!isset($properties[$name]['properties'])) {
                 $properties[$name]['properties'] = [];
