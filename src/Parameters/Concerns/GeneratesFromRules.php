@@ -48,13 +48,18 @@ trait GeneratesFromRules
 
     protected function getEnumValues(array $paramRules): array
     {
-        $in = $this->getInParameter($paramRules);
+        $in   = $this->getInParameter($paramRules);
+        $enum = $this->getEnumParameter($paramRules);
 
-        if (!$in) {
+        if (!$in && !$enum) {
             return [];
         }
 
-        [$param, $vals] = explode(':', $in);
+        if ($enum) {
+            return array_column($enum::cases(), 'value');
+        } else {
+            [$param, $vals] = explode(':', $in);
+        }
 
         return explode(',', $vals);
     }
@@ -62,8 +67,22 @@ trait GeneratesFromRules
     private function getInParameter(array $paramRules)
     {
         foreach ($paramRules as $rule) {
-            if ((is_string($rule) || method_exists($rule, '__toString')) && Str::startsWith((string) $rule, 'in:')) {
+            if ((is_string($rule) || method_exists($rule, '__toString')) && Str::startsWith((string)$rule, 'in:')) {
                 return $rule;
+            }
+        }
+
+        return false;
+    }
+
+    private function getEnumParameter(array $paramRules)
+    {
+        foreach ($paramRules as $rule) {
+            if (is_object($rule) && $rule instanceof \Illuminate\Validation\Rules\Enum) {
+                $reflection = new \ReflectionClass($rule);
+                $property   = $reflection->getProperty('type');
+                $property->setAccessible(true);
+                return $property->getValue($rule);
             }
         }
 
