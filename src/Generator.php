@@ -126,7 +126,7 @@ class Generator
         $allRoutes = $this->getAllAppRoutes();
 
         $routes = array_filter($allRoutes, function (Route $route) {
-            return !in_array($route->getName(), $this->config['ignoredRoutes']) ||
+            return !in_array($route->getName(), $this->config['ignoredRoutes']) &&
                 !in_array($route->getUri(), $this->config['ignoredRouteUris']);
         });
 
