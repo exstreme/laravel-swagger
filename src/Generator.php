@@ -39,9 +39,9 @@ class Generator
      */
     public function __construct($config, $routeFilter = null)
     {
-        $this->config = $config;
-        $this->routeFilter = $routeFilter;
-        $this->docParser = DocBlockFactory::createInstance();
+        $this->config                 = $config;
+        $this->routeFilter            = $routeFilter;
+        $this->docParser              = DocBlockFactory::createInstance();
         $this->hasSecurityDefinitions = false;
 
         if ($this->config['parseSecurity']) {
@@ -63,7 +63,7 @@ class Generator
         $securityDefinitions = $this->generateSecurityDefinitions();
         if ($securityDefinitions) {
             $this->docs['securityDefinitions'] = $securityDefinitions;
-            $this->hasSecurityDefinitions = true;
+            $this->hasSecurityDefinitions      = true;
         }
 
         foreach ($this->getAppRoutes() as $route) {
@@ -90,13 +90,13 @@ class Generator
     protected function getBaseStructure(): array
     {
         $baseInfo = [
-            'swagger' => '2.0',
-            'info' => [
-                'title' => $this->config['title'],
+            'swagger'  => '2.0',
+            'info'     => [
+                'title'       => $this->config['title'],
                 'description' => $this->config['description'],
-                'version' => $this->config['appVersion'],
+                'version'     => $this->config['appVersion'],
             ],
-            'host' => preg_replace('/^https?:\/\//', '', $this->config['host']),
+            'host'     => preg_replace('/^https?:\/\//', '', $this->config['host']),
             'basePath' => $this->config['basePath'],
         ];
 
@@ -112,7 +112,7 @@ class Generator
             $baseInfo['produces'] = $this->config['produces'];
         }
 
-        $baseInfo['paths'] = [];
+        $baseInfo['paths']       = [];
         $baseInfo['definitions'] = [];
 
         return $baseInfo;
@@ -126,7 +126,8 @@ class Generator
         $allRoutes = $this->getAllAppRoutes();
 
         $routes = array_filter($allRoutes, function (Route $route) {
-            return !in_array($route->getName(), $this->config['ignoredRoutes']);
+            return !in_array($route->getName(), $this->config['ignoredRoutes']) ||
+                !in_array($route->getUri(), $this->config['ignoredRouteUris']);
         });
 
         if ($this->routeFilter) {
@@ -173,16 +174,16 @@ class Generator
     protected function generatePath(): void
     {
         $actionInstance = $this->getActionClassInstance();
-        $docBlock = $actionInstance ? ($actionInstance->getDocComment() ?: '') : '';
+        $docBlock       = $actionInstance ? ($actionInstance->getDocComment() ?: '') : '';
 
         [$isDeprecated, $summary, $description] = $this->parseActionDocBlock($docBlock);
 
         $path = $this->getRouteUri();
 
         $this->docs['paths'][$path][$this->method] = [
-            'summary' => $summary,
+            'summary'     => $summary,
             'description' => $description,
-            'deprecated' => $isDeprecated,
+            'deprecated'  => $isDeprecated,
         ];
 
         $this->addActionDefinitions();
@@ -291,8 +292,8 @@ class Generator
 
             $isDeprecated = $parsedComment->hasTag('deprecated');
 
-            $summary = $parsedComment->getSummary();
-            $description = (string) $parsedComment->getDescription();
+            $summary     = $parsedComment->getSummary();
+            $description = (string)$parsedComment->getDescription();
 
             return [$isDeprecated, $summary, $description];
         } catch (\Exception $e) {
@@ -303,7 +304,7 @@ class Generator
     private function addActionResponses(): void
     {
         $responses = (
-            new ResponseGenerator($this->route, $this->config['errors_definitions'])
+        new ResponseGenerator($this->route, $this->config['errors_definitions'])
         )->generate();
 
         $this->docs['paths'][$this->getRouteUri()][$this->method]['responses'] = $responses;

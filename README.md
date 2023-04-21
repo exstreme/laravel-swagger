@@ -65,6 +65,9 @@ In the file `config/laravel-swagger.php` you can define your api versions, just 
                 'laravel-swagger.docs',
                 'laravel-swagger.asset'
             ],
+            'ignoredRouteUris' => [
+                
+            ],
             'authFlow' => 'accessCode',
             'security_definition_type' => 'oauth2',
             'file_format' => 'json',
@@ -110,6 +113,9 @@ In the file `config/laravel-swagger.php` you can define your api versions, just 
             'ignoredRoutes' => [
                 'laravel-swagger.docs',
                 'laravel-swagger.asset'
+            ],
+            'ignoredRouteUris' => [
+                
             ],
             'authFlow' => 'accessCode',
             'security_definition_type' => 'jwt',

@@ -137,6 +137,9 @@ return [
                 'laravel-swagger.docs',
                 'laravel-swagger.asset',
             ],
+            'ignoredRouteUris' => [
+
+            ],
 
             /*
             |--------------------------------------------------------------------------
